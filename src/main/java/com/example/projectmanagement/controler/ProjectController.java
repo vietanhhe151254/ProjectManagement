@@ -3,6 +3,8 @@ package com.example.projectmanagement.controler;
 import com.example.projectmanagement.entities.*;
 import com.example.projectmanagement.repository.ProjectManageRepository;
 import com.example.projectmanagement.service.*;
+import com.example.projectmanagement.settings.EmployeeFilterRequest;
+import com.example.projectmanagement.settings.ProjectFilterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -10,8 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/project")
@@ -30,15 +32,21 @@ public class ProjectController {
     ProjectManageRepository projectManageRepository;
 
     @RequestMapping("")
-    public String findPaginated(@RequestParam(name = "pageNo", required = false) Integer pageNo, ModelMap model) {
+    public String findPaginated(@RequestParam(name = "pageNo", required = false) Integer pageNo, ModelMap model,
+                                @ModelAttribute(name = "filter") ProjectFilterRequest filterRequest) {
         int pageSize = 10;
         if (pageNo == null || pageNo == 0) {
             pageNo = 1;
         }
-        Page<Project> projects = projectService.findPaginated(pageNo, pageSize);
+        if (filterRequest.getKeyword() == null) {
+            filterRequest.setKeyword("");
+        }
+        Page<Project> projects = projectService.findPaginated(pageNo, pageSize, filterRequest);
         List<Status> statusList = statusService.listAll();
         List<Language> languages = languageService.listAll();
         model.addAttribute("languageList", languages);
+        model.addAttribute("filterRequest", filterRequest);
+        model.addAttribute("filter", new ProjectFilterRequest());
         model.addAttribute("statusList", statusList);
         model.addAttribute("projects", projects);
         return "viewproject";
@@ -65,7 +73,7 @@ public class ProjectController {
         for (Employee employee : projectManage.getEmployeeList()) {
             ManageProjectKey manageProjectKey = new ManageProjectKey();
             manageProjectKey.setProjectId(projectManage.getProject().getId());
-            manageProjectKey.setEmployeeId(projectManage.getEmployee().getId());
+            manageProjectKey.setEmployeeId(employee.getId());
             projectManage.setId(manageProjectKey);
             projectManage.setEmployee(employee);
             projectManage.setIsDelete(false);
@@ -76,7 +84,7 @@ public class ProjectController {
             projectManageService.saveOrUpdateProject(projectManage);
         }
 
-        return "redirect:../";
+        return "redirect:../../project/edit/"+ projectManage.getProject().getId();
     }
 
     @RequestMapping(value = "edit/{id}")
@@ -85,12 +93,13 @@ public class ProjectController {
         List<Employee> employeeList = employeeService.listEmplOfProject(project);
         List<Status> statusList = statusService.listAll();
         List<Language> languages = languageService.listAll();
+        Set<ProjectManage> employees = project.getProjectManages();
         model.addAttribute("history", new ProjectManage());
         model.addAttribute("employees", employeeList);
         model.addAttribute("projects", project);
         model.addAttribute("languageList", languages);
+        model.addAttribute("employeeselected", employees);
         model.addAttribute("statusList", statusList);
-        model.addAttribute("employeeList", new ArrayList<ProjectManage>());
         return "detail_project";
     }
 }

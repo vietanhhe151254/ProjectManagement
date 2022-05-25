@@ -160,8 +160,8 @@
                         </td>
                         <td><select multiple style="width: 70%" class="demxo-default selectize"
                                     placeholder="Select Models">
-                            <option th:each="emp : ${employees}" th:value="${emp.id}"
-                                    th:text="${emp.name}"></option>
+                            <option th:each="emp : ${employeeselected}" th:value="${emp.employee.id}"
+                                    th:text="${emp.employee.name}"></option>
                         </select></td>
                     </tr>
                     </tbody>
@@ -193,7 +193,7 @@
                 <input type="hidden" th:value="${projects.id}" name="project" >
                 <div class="modal-body">
                     <select multiple style="width: 100%" class="demxo-default selectize"
-                            th:field="*{employee}"
+                            th:field="*{employeeList}"
                             placeholder="Select Models">
                         <option th:each="emp : ${employees}" th:value="${emp.id}"
                                 th:text="${emp.name}"></option>

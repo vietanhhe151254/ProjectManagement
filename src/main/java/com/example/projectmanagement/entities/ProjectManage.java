@@ -15,15 +15,24 @@ public class ProjectManage {
     @EmbeddedId
     ManageProjectKey id;
 
-    @ManyToOne
     @MapsId("projectId")
-    @JoinColumn(name = "project_id",nullable = false)
-    Project project;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
 
-    @ManyToOne
     @MapsId("employeeId")
-    @JoinColumn(name = "employee_id",nullable = false)
-    Employee employee;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "employee_id", nullable = false)
+    private Employee employee;
+
+    public List<Employee> getEmployeeList() {
+        return employeeList;
+    }
+
+    public void setEmployeeList(List<Employee> employeeList) {
+        this.employeeList = employeeList;
+    }
+
     @ManyToOne
     @JoinColumn(name = "status_id",nullable = false)
     private Status status;

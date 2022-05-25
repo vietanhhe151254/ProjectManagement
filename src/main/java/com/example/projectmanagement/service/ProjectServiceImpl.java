@@ -1,15 +1,14 @@
 package com.example.projectmanagement.service;
 
-import com.example.projectmanagement.entities.Employee;
 import com.example.projectmanagement.entities.Project;
 import com.example.projectmanagement.repository.ProjectRepository;
+import com.example.projectmanagement.settings.ProjectFilterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.xml.ws.ServiceMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,9 +41,9 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
-    public Page<Project> findPaginated(int pageNo, int pageSize) {
+    public Page<Project> findPaginated(int pageNo, int pageSize, ProjectFilterRequest projectFilterRequest) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        return this.projectRepository.findAllByProject(pageable);
+        return this.projectRepository.findAllByProject(projectFilterRequest, pageable);
 
     }
 

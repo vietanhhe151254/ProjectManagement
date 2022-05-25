@@ -4,16 +4,16 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Dark Admin by Bootstrapious.com</title>
+    <title>Project</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,700">
     <link rel="stylesheet" th:href="@{../../css/style.default.css}" id="theme-stylesheet">
     <link rel="shortcut icon" th:href="@{../../img/favicon.ico}">
-
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js/"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
 <body>
 <header class="header">
@@ -75,45 +75,82 @@
                 </svg>
                 <span>Project</span></a></li>
         </ul>
-        <span class="text-uppercase text-gray-600 text-xs mx-3 px-2 heading mb-2">Extras</span>
-        <ul class="list-unstyled">
-            <li class="sidebar-item"><a class="sidebar-link" href="#">
-                <svg class="svg-icon svg-icon-sm svg-icon-heavy">
-                    <use xlink:href="#imac-screen-1"></use>
-                </svg>
-                <span>Demo </span></a></li>
-            <li class="sidebar-item"><a class="sidebar-link" href="#">
-                <svg class="svg-icon svg-icon-sm svg-icon-heavy">
-                    <use xlink:href="#chart-1"></use>
-                </svg>
-                <span>Demo </span></a></li>
-        </ul>
     </nav>
-    <div class="page-content"style="margin-top: 2px;margin-left: 2px;margin-right: 2px;">
-        <!-- Page Header-->
+    <div class="page-content" style="margin-top: 2px;margin-left: 2px;margin-right: 2px;">
         <div class="bg-dash-dark-2 py-4">
             <div class="container-fluid">
                 <h2 class="h5 mb-0">Employee</h2>
             </div>
             <div class="form-group mt-2">
-                <form  method="post">
-                <div class="row">
-                    <label class="col-sm-1 control-label" for="country" style="font-size: 20px">Status</label>
-                    <div class="col-sm-2 ">
-                        <select id="country" name="user.country" class="form-control"
-                                required="required">
-                            <option th:each="status : ${statusList}" th:value="${status.id}"
-                                    th:text="${status.name} " ></option>
-                        </select>
+                <form th:object="${filter}" th:action="@{'/project'}" method="get">
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
+                            <div class="form-group mb-3">
+                                <label class="h5">Languages</label>
+                                <select class="dropdown-toggle form-control" name="language">
+                                    <option class="dropdown-item" value="0">All</option>
+                                    <option class="dropdown-item" th:each="l : ${languageList}" th:selected="${filterRequest.language == l.id}" th:value="${l.id}" th:text="${l.name}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="h5">Status</label>
+                                <select class="dropdown-toggle form-control" name="status">
+                                    <option class="dropdown-item" th:selected="${filterRequest.status == 0}" value="0">All</option>
+                                    <option class="dropdown-item" th:each="stt : ${statusList}" th:selected="${filterRequest.status == stt.id}" th:value="${stt.id}" th:text="${stt.name}"></option>
+
+                                </select>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="h5">Start Date</label>
+                                <input class="form-control" th:value="${filterRequest.startDate}" name="startDate" placeholder="Search here/" type="date">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="h5">End Date</label>
+                                <input class="form-control" name="endDate" th:value="${filterRequest.endDate}" placeholder="Search here/" type="date">
+                            </div>
+                            <div class="form-group mb-3" style="display: flex">
+                                <input class="form-control" name="keyword" th:value="${filterRequest.keyword}" placeholder="Search here/" type="text">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-2" style="float: right"><input placeholder="Enter details"></div>
-                    <div class="col-sm-3" style="float: right">
-                        <button type="submit" class="btn btn-secondary" >Search</button>
-                    </div>
-                </div>
                 </form>
+<!--                <form th:object="${filter}" th:action="@{/project}" method="post">-->
+<!--                    <div class="row">-->
+<!--                        <label class="col-md-1 " style="font-size: 20px">Status</label>-->
+<!--                        <div class="col-md-2 ">-->
+<!--                            <select class="form-control"-->
+<!--                                    required="required" th:field="*{status}">-->
+<!--                                <option class="dropdown-item" value="0">All</option>-->
+<!--                                <option th:each="status : ${statusList}" th:value="${status.id}"-->
+<!--                                        th:text="${status.name} "></option>-->
+<!--                            </select>-->
+<!--                        </div>-->
+<!--                        <label class="col-md-1 " style="font-size: 20px">Language</label>-->
+<!--                        <div class="col-sm-2 ">-->
+<!--                            <select class="form-control"-->
+<!--                                    required="required" th:field="*{language}">-->
+<!--                                <option class="dropdown-item" value="0">All</option>-->
+<!--                                <option th:each="language : ${languageList}" th:value="${language.id}"-->
+<!--                                        th:text="${language.name} "></option>-->
+<!--                            </select>-->
+<!--                        </div>-->
+<!--                        <label class="col-sm-1 " style="font-size: 20px">StartDate</label>-->
+<!--                        <div class="col-sm-2 ">-->
+<!--                            <input class="form-control" required="required" type="date" th:field="*{startDate}">-->
+<!--                        </div>-->
+<!--                        <label class="col-sm-1 " style="font-size: 20px">EndDate</label>-->
+<!--                        <div class="col-sm-2 ">-->
+<!--                            <input class="form-control" required="required" th:field="*{endDate}" type="date">-->
+<!--                        </div>-->
+<!--                        <div class="col-sm-1" style="display: flex"><input placeholder="Enter details">-->
+<!--                            <button type="submit" class="btn btn-secondary">Search</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </form>-->
             </div>
-            <a th:href="@{/project/add}"class="btn btn-primary" style="width: 200px;margin-left: 45%;margin-top: 20px">Add Project</a>
+            <a th:href="@{/project/add}" class="btn btn-primary" style="width: 200px;margin-left: 45%;margin-top: 20px">Add
+                Project</a>
 
 
             <!--body-->
@@ -131,14 +168,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="projects,state : ${projects}" >
+                <tr th:each="projects,state : ${projects}">
                     <td th:text="${state.count}"></td>
                     <td th:text="${projects.getProjectName()}"></td>
                     <td th:text="${projects.describtion}"></td>
                     <td th:text="${projects.startDate}"></td>
                     <td th:text="${projects.endDate}"></td>
                     <td th:text="${projects.status.name}"></td>
-                    <td style="text-align: center"><a th:href="@{/project/edit/{id}(id=${projects.id})}"class="btn btn-primary" style="width: 100px">Edit</a>
+                    <td style="text-align: center"><a th:href="@{/project/edit/{id}(id=${projects.id})}"
+                                                      class="btn btn-primary" style="width: 100px">Edit</a>
                     </td>
                 </tr>
                 </tbody>
@@ -162,28 +200,30 @@
     </div>
 </div>
 
-    <!-- Main File-->
-    <script th:src="@{../../js/front.js}"></script>
-    <script>
-        $("#select-state").selectize({
-            maxItems: 3,
-        });
-        function injectSvgSprite(path) {
+<!-- Main File-->
+<script th:src="@{../../js/front.js}"></script>
+<script>
+    $("#select-state").selectize({
+        maxItems: 3,
+    });
 
-            var ajax = new XMLHttpRequest();
-            ajax.open("GET", path, true);
-            ajax.send();
-            ajax.onload = function (e) {
-                var div = document.createElement("div");
-                div.className = 'd-none';
-                div.innerHTML = ajax.responseText;
-                document.body.insertBefore(div, document.body.childNodes[0]);
-            }
+    function injectSvgSprite(path) {
+
+        var ajax = new XMLHttpRequest();
+        ajax.open("GET", path, true);
+        ajax.send();
+        ajax.onload = function (e) {
+            var div = document.createElement("div");
+            div.className = 'd-none';
+            div.innerHTML = ajax.responseText;
+            document.body.insertBefore(div, document.body.childNodes[0]);
         }
-        injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg');
-    </script>
+    }
 
-    <link rel="stylesheet" th:href="@{https://use.fontawesome.com/releases/v5.7.1/css/all.css}"
-          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg');
+</script>
+
+<link rel="stylesheet" th:href="@{https://use.fontawesome.com/releases/v5.7.1/css/all.css}"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 </body>
 </html>

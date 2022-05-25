@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
@@ -34,7 +35,16 @@ public class Project {
     )
     private Set<Language> languages = new HashSet<>();
 
+    @OneToMany(mappedBy = "project")
+    private Set<ProjectManage> projectManages = new LinkedHashSet<>();
 
+    public Set<ProjectManage> getProjectManages() {
+        return projectManages;
+    }
+
+    public void setProjectManages(Set<ProjectManage> projectManages) {
+        this.projectManages = projectManages;
+    }
 
     public Project() {
     }
