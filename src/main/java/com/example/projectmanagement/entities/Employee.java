@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 
@@ -38,6 +35,16 @@ public class Employee {
     )
     private Set<Language> languages = new HashSet<>();
 
+    public Set<ProjectManage> getProjectManages() {
+        return projectManages;
+    }
+
+    public void setProjectManages(Set<ProjectManage> projectManages) {
+        this.projectManages = projectManages;
+    }
+
+    @OneToMany(mappedBy = "employee")
+    private Set<ProjectManage> projectManages = new LinkedHashSet<>();
 
     public Employee() {
     }

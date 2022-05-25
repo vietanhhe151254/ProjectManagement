@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Query(value = "SELECT *,count(pm.employee_id) \n" +
             "from projectmanagement.employee e left join projectmanagement.projectmanage pm on e.ID = pm.employee_id \n" +
-            "where e.status_id = 1  and (pm.status_id = 1 Or pm.status_id is null) \n" +
+            "where e.status_id = 1  and (pm.status_id = 1 Or pm.status_id is null)  \n" +
             "group by e.ID having count(pm.employee_id) < 3",nativeQuery = true)
     List<Employee> joinProject();
 

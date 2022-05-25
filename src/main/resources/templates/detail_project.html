@@ -4,17 +4,13 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Dark Admin by Bootstrapious.com</title>
+    <title>Project</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
-    <!-- Choices.js-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/css/selectize.css" rel="stylesheet}"/>
-
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,700">
-    <!-- theme stylesheet-->
     <link rel="stylesheet" th:href="@{../../css/style.default.css}" id="theme-stylesheet">
-    <!-- Custom stylesheet - for your changes-->
     <link rel="stylesheet" th:href="@{../../css/custom.css}">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -23,10 +19,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
-    <!-- Favicon-->
     <link rel="shortcut icon" th:href="@{../../img/favicon.ico}">
-
-    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
 </head>
@@ -79,17 +72,7 @@
     </nav>
 </header>
 <div class="d-flex align-items-stretch">
-    <!-- Sidebar Navigation-->
     <nav id="sidebar">
-        <!-- Sidebar Header-->
-        <div class="sidebar-header d-flex align-items-center p-4"><img class="avatar shadow-0 img-fluid rounded-circle"
-                                                                       src="https://scontent.fhan2-1.fna.fbcdn.net/v/t1.6435-9/187530923_1270036186726836_999916704996269451_n.jpg?_nc_cat=101&ccb=1-5&_nc_sid=174925&_nc_ohc=4C439ayL64wAX_oqma4&tn=XnzXai5bJNcYq6gU&_nc_ht=scontent.fhan2-1.fna&oh=00_AT_V2dsrU5brH59MaIXNRSEvd3hdp1eRnAyFzpH7Lgidjg&oe=628F39EB"
-                                                                       alt="...">
-            <div class="ms-3 title">
-                <h1 class="h5 mb-1">Viet Anh Nè</h1>
-                <p class="text-sm text-gray-700 mb-0 lh-1">Web Designer</p>
-            </div>
-        </div>
         <span class="text-uppercase text-gray-600 text-xs mx-3 px-2 heading mb-2">Main</span>
         <ul class="list-unstyled">
             <li class="sidebar-item active"><a class="sidebar-link" th:href="@{/employee}">
@@ -97,7 +80,7 @@
                     <use xlink:href="#real-estate-1"></use>
                 </svg>
                 <span>Employee</span></a></li>
-            <li class="sidebar-item"><a class="sidebar-link" th:href="@{/employee}">
+            <li class="sidebar-item"><a class="sidebar-link" th:href="@{/project}">
                 <svg class="svg-icon svg-icon-sm svg-icon-heavy">
                     <use xlink:href="#disable-1"></use>
                 </svg>
@@ -105,7 +88,6 @@
         </ul>
     </nav>
     <div class="page-content">
-        <!-- Page Header-->
         <div class="bg-dash-gray ">
             <div class="container-fluid">
                 <h2 class="h5 mb-0"> UPDATE PROJECT</h2>
@@ -160,14 +142,14 @@
                         </td>
                         <td><select multiple style="width: 70%" class="demxo-default selectize"
                                     placeholder="Select Models">
-                            <option th:each="emp : ${employees}" th:value="${emp.id}"
-                                    th:text="${emp.name}"></option>
+                            <option th:each="emp : ${employeeselected}" th:value="${emp.employee.id}"
+                                    th:text="${emp.employee.name}"></option>
                         </select></td>
                     </tr>
                     </tbody>
                 </table>
                 <button class="btn btn-primary" type="submit"
-                        style="margin-left: auto;margin-right: auto; display: block;margin-top:10px">Button
+                        style="margin-left: auto;margin-right: auto; display: block;margin-top:10px">Save
                 </button>
             </form>
             <footer class="position-absolute bottom-0 bg-dash-dark-2 text-white text-center py-3 w-100 text-xs"
@@ -181,7 +163,6 @@
         </div>
     </div>
 </div>
-<!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -193,7 +174,7 @@
                 <input type="hidden" th:value="${projects.id}" name="project" >
                 <div class="modal-body">
                     <select multiple style="width: 100%" class="demxo-default selectize"
-                            th:field="*{employee}"
+                            th:field="*{employeeList}"
                             placeholder="Select Models">
                         <option th:each="emp : ${employees}" th:value="${emp.id}"
                                 th:text="${emp.name}"></option>
@@ -204,23 +185,17 @@
                     <button type="submit" class="btn btn-primary" >Save changes</button>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
-<!-- JavaScript files-->
 <script th:src="@{../../js/bootstrap.min.js}"></script>
 <script th:src="@{../../js/selectize.js}"></script>
 <script th:src="@{../static/js/selectize.jquery.js}"></script>
-
-
 <script>
     var select = $('#select-state').selectize({
         "maxItems": 8
     });
-
     function injectSvgSprite(path) {
-
         var ajax = new XMLHttpRequest();
         ajax.open("GET", path, true);
         ajax.send();
@@ -231,9 +206,6 @@
             document.body.insertBefore(div, document.body.childNodes[0]);
         }
     }
-
-
-    injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg');
 </script>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
       integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">

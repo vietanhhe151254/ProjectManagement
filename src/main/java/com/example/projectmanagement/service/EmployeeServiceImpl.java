@@ -3,6 +3,7 @@ package com.example.projectmanagement.service;
 import com.example.projectmanagement.entities.Employee;
 import com.example.projectmanagement.entities.Language;
 import com.example.projectmanagement.entities.Project;
+import com.example.projectmanagement.entities.ProjectManage;
 import com.example.projectmanagement.settings.EmployeeFilterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.projectmanagement.repository.EmployeeRepository;
@@ -12,9 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -30,13 +29,27 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<Employee> listEmplOfProject( Project project) {
         List<Employee> employeeList = employeeRepository.joinProject();
         List<Employee> result = new ArrayList<>();
+        Set<Language> languageSet = project.getLanguages();
+        Set<ProjectManage> employees = project.getProjectManages();
+        boolean isContainLanguage = false,isExistEmployee = false;
         for (Employee employee: employeeList) {
-            for (Language language: project.getLanguages()) {
-                if (employee.getLanguages().contains(language)){
-                    result.add(employee);
+            for(Language language : employee.getLanguages()){
+                if(languageSet.contains(language)){
+                    isContainLanguage = true;
                     break;
                 }
             }
+            for (ProjectManage projectManage : employees){
+                if (Objects.equals(projectManage.getEmployee().getId(), employee.getId())) {
+                    isExistEmployee = true;
+                    break;
+                }
+            }
+            if (isContainLanguage && !isExistEmployee){
+                result.add(employee);
+            }
+            isExistEmployee = false;
+            isContainLanguage = false;
         }
         return result;
     }

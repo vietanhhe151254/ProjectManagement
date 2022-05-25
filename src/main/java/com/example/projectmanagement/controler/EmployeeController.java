@@ -1,9 +1,6 @@
 package com.example.projectmanagement.controler;
 
-import com.example.projectmanagement.entities.Employee;
-import com.example.projectmanagement.entities.Language;
-import com.example.projectmanagement.entities.Role;
-import com.example.projectmanagement.entities.Status;
+import com.example.projectmanagement.entities.*;
 import com.example.projectmanagement.service.*;
 import com.example.projectmanagement.settings.EmployeeFilterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/employee")
@@ -80,9 +78,11 @@ public class EmployeeController {
         List<Role> roleList = roleService.listAll();
         List<Status> statusList = statusService.listAll();
         List<Language> languages = languageService.listAll();
+        Set<ProjectManage> projectManages = employee.get().getProjectManages();
         model.addAttribute("detailEmployee", employee);
         model.addAttribute("languageList", languages);
         model.addAttribute("roleList", roleList);
+        model.addAttribute("historyProject", projectManages);
         model.addAttribute("statusList", statusList);
         return "details";
     }
